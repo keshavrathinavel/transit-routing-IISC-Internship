@@ -1,3 +1,5 @@
+import re
+import itertools
 
 inputLocation = r'C://Users//kesha//Documents//GitHub//transit-routing-IISC-Internship//python_exam//'
 # inputLocation2 = 'Data/'
@@ -5,6 +7,7 @@ inputLocation = r'C://Users//kesha//Documents//GitHub//transit-routing-IISC-Inte
 
 od = {}
 class data:
+    line_value = []
     init_node = []
     term_node = []
     capacity = []
@@ -20,6 +23,7 @@ class data:
 # origin_no = []  # our starting Origin number in case the file doesn't begin with one
 with open(inputLocation+"ChicagoSketch_net.tntp", "r") as f:
     dat = data()
+    templis = []
     for line in f:
         if line.startswith("<NUMBER OF ZONES>"):
             num_zones = int(line[18:].strip())
@@ -42,23 +46,29 @@ with open(inputLocation+"ChicagoSketch_net.tntp", "r") as f:
                 for element in elements:
                     if not element:
                         continue
-                    dat.init_node.append(element[8:12].strip())
-                
+                    dat.line_value.append(re.split(r'\t+', element))
+    del dat.line_value[0:4]
+    # dat.line_value.sort()
+    # list(dat.line_value for dat.line_value,_ in itertools.groupby(dat.line_value) )
+    recurring_elements = []
+    for elem in dat.line_value:
+        if elem not in recurring_elements:
+            recurring_elements.append(elem)
+    dat.line_value = recurring_elements
+    for sub_list in dat.line_value:
+        for item in sub_list:
+            templis = item.split()
+            print(templis)
+            
 
-                    
-
-
-
-    
-    
-    
-    
+           
     
     f.close()
 print("num_zones: " + str(num_zones))
 print("num_nodes: " + str(num_nodes))
 print("num_links: " + str(num_links))
-print(dat.init_node)
+# print(dat.line_value)
+# print(dat.init_node)
 
     
     # for line in f:
